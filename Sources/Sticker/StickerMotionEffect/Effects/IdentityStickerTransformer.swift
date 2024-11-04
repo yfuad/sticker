@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-public struct IdentityStickerTransformer: StickerTransformer {
+public struct IdentityStickerTransformer: StickerMotionEffect {
     public func body(content: Content) -> some View {
         content
     }
 }
 
-public extension StickerTransformer where Self == IdentityStickerTransformer {
+public extension StickerMotionEffect where Self == IdentityStickerTransformer {
     static var identity: Self {
         .init()
     }
