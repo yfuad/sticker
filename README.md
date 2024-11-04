@@ -31,7 +31,7 @@ struct ContentView: View {
 
 By default, the effect is not animated.
 
-### Motion
+## Motion
 
 The effect can be animated using the `.stickerMotionEffect()` view modifier.
 
