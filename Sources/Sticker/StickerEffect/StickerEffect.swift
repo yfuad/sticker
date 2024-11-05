@@ -11,17 +11,33 @@ private struct StickerEffectViewModifier: ViewModifier {
     @State private var motion: StickerMotion = .init()
 
     @Environment(\.stickerMotionEffect) private var effect
+    @Environment(\.stickerEffectScale) private var stickerEffectScale
+    @Environment(\.stickerEffectIntensity) private var stickerEffectIntensity
+    @Environment(\.stickerEffectContrast) private var stickerEffectContrast
+    @Environment(\.stickerEffectBlendFactor) private var stickerEffectBlendFactor
+    @Environment(\.stickerEffectNoiseScale) private var stickerEffectNoiseScale
+    @Environment(\.stickerEffectNoiseIntensity) private var stickerEffectNoiseIntensity
+    @Environment(\.stickerEffectLightIntensity) private var stickerEffectLightIntensity
 
     func body(content: Content) -> some View {
         content
-            .visualEffect { [motion] view, proxy in
+            .visualEffect { [motion, stickerEffectScale, stickerEffectIntensity, stickerEffectContrast, stickerEffectBlendFactor, stickerEffectNoiseScale, stickerEffectNoiseIntensity] view, proxy in
                 view
                     .colorEffect(
                         ShaderLibrary.foilShader(
                             offset: motion.isActive ? (motion.transform * -150).point : StickerTransform.neutral.point,
-                            size: proxy.size
+                            size: proxy.size,
+                            scale: stickerEffectScale,
+                            intensity: stickerEffectIntensity,
+                            contrast: stickerEffectContrast,
+                            blendFactor: stickerEffectBlendFactor,
+                            noiseScale: stickerEffectNoiseScale,
+                            noiseIntensity: stickerEffectNoiseIntensity
                         )
                     )
+            }
+            .visualEffect { [motion, stickerEffectLightIntensity] view, proxy in
+                view
                     .colorEffect(
                         ShaderLibrary.reflectionShader(
                             size: proxy.size,
@@ -30,7 +46,7 @@ private struct StickerEffectViewModifier: ViewModifier {
                                 y: motion.transform.y
                             ),
                             reflectionSize: Float(min(proxy.size.width, proxy.size.height) / 2),
-                            reflectionIntensity: motion.isActive ? 0.3 : 0
+                            reflectionIntensity: motion.isActive ? stickerEffectLightIntensity : 0
                         )
                     )
             }
