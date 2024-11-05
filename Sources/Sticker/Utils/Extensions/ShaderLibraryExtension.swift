@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  ShaderLibraryExtension.swift
 //  Sticker
 //
 //  Created by Benjamin Pisano on 03/11/2024.

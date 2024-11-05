@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StickerEffect.swift
 //  Sticker
 //
 //  Created by Benjamin Pisano on 03/11/2024.
@@ -11,32 +11,37 @@ private struct StickerEffectViewModifier: ViewModifier {
     @State private var motion: StickerMotion = .init()
 
     @Environment(\.stickerMotionEffect) private var effect
-    @Environment(\.stickerEffectScale) private var stickerEffectScale
-    @Environment(\.stickerEffectIntensity) private var stickerEffectIntensity
-    @Environment(\.stickerEffectContrast) private var stickerEffectContrast
-    @Environment(\.stickerEffectBlendFactor) private var stickerEffectBlendFactor
-    @Environment(\.stickerEffectNoiseScale) private var stickerEffectNoiseScale
-    @Environment(\.stickerEffectNoiseIntensity) private var stickerEffectNoiseIntensity
-    @Environment(\.stickerEffectLightIntensity) private var stickerEffectLightIntensity
+    @Environment(\.stickerScale) private var stickerScale
+    @Environment(\.stickerIntensity) private var stickerIntensity
+    @Environment(\.stickerContrast) private var stickerContrast
+    @Environment(\.stickerBlend) private var stickerBlend
+    @Environment(\.stickerNoiseScale) private var stickerNoiseScale
+    @Environment(\.stickerNoiseIntensity) private var stickerNoiseIntensity
+    @Environment(\.stickerLightIntensity) private var stickerLightIntensity
 
     func body(content: Content) -> some View {
         content
-            .visualEffect { [motion, stickerEffectScale, stickerEffectIntensity, stickerEffectContrast, stickerEffectBlendFactor, stickerEffectNoiseScale, stickerEffectNoiseIntensity] view, proxy in
+            .visualEffect {
+                [
+                    motion, stickerScale, stickerIntensity, stickerContrast, stickerBlend,
+                    stickerNoiseScale, stickerNoiseIntensity
+                ] view, proxy in
                 view
                     .colorEffect(
                         ShaderLibrary.foilShader(
-                            offset: motion.isActive ? (motion.transform * -150).point : StickerTransform.neutral.point,
+                            offset: motion.isActive
+                                ? (motion.transform * -150).point : StickerTransform.neutral.point,
                             size: proxy.size,
-                            scale: stickerEffectScale,
-                            intensity: stickerEffectIntensity,
-                            contrast: stickerEffectContrast,
-                            blendFactor: stickerEffectBlendFactor,
-                            noiseScale: stickerEffectNoiseScale,
-                            noiseIntensity: stickerEffectNoiseIntensity
+                            scale: stickerScale,
+                            intensity: stickerIntensity,
+                            contrast: stickerContrast,
+                            blendFactor: stickerBlend,
+                            noiseScale: stickerNoiseScale,
+                            noiseIntensity: stickerNoiseIntensity
                         )
                     )
             }
-            .visualEffect { [motion, stickerEffectLightIntensity] view, proxy in
+            .visualEffect { [motion, stickerLightIntensity] view, proxy in
                 view
                     .colorEffect(
                         ShaderLibrary.reflectionShader(
@@ -46,7 +51,7 @@ private struct StickerEffectViewModifier: ViewModifier {
                                 y: motion.transform.y
                             ),
                             reflectionSize: Float(min(proxy.size.width, proxy.size.height) / 2),
-                            reflectionIntensity: motion.isActive ? stickerEffectLightIntensity : 0
+                            reflectionIntensity: motion.isActive ? stickerLightIntensity : 0
                         )
                     )
             }
@@ -66,9 +71,9 @@ private struct StickerEffectViewModifier: ViewModifier {
     }
 }
 
-public extension View {
+extension View {
     @ViewBuilder
-    func stickerEffect(_ isEnabled: Bool = true) -> some View {
+    public func stickerEffect(_ isEnabled: Bool = true) -> some View {
         if isEnabled {
             modifier(StickerEffectViewModifier())
         } else {

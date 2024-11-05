@@ -37,22 +37,22 @@ The following modifiers are available to customize the sticker effect:
 
 | Modifier | Default Value | Description |
 |----------|---------------|-------------|
-| `.stickerEffectScale(_:)` | 1.4 | Controls the overall scale of the effect pattern |
-| `.stickerEffectIntensity(_:)` | 0.8 | Adjusts the strength of the holographic effect |
-| `.stickerEffectContrast(_:)` | 0.9 | Modifies the contrast between light and dark areas |
-| `.stickerEffectBlendFactor(_:)` | 0.4 | Controls how much the effect blends with the original content |
-| `.stickerEffectNoiseScale(_:)` | 140.0 | Adjusts the scale of the noise pattern |
-| `.stickerEffectNoiseIntensity(_:)` | 0.1 | Controls the intensity of the noise effect |
-| `.stickerEffectLightIntensity(_:)` | 0.3 | Adjusts the intensity of the light reflection |
+| `.stickerScale(_:)` | 1.4 | Controls the overall scale of the effect pattern |
+| `.stickerIntensity(_:)` | 0.8 | Adjusts the strength of the holographic effect |
+| `.stickerContrast(_:)` | 0.9 | Modifies the contrast between light and dark areas |
+| `.stickerBlend(_:)` | 0.4 | Controls how much the effect blends with the original content |
+| `.stickerNoiseScale(_:)` | 140.0 | Adjusts the scale of the noise pattern |
+| `.stickerNoiseIntensity(_:)` | 0.1 | Controls the intensity of the noise effect |
+| `.stickerLightIntensity(_:)` | 0.3 | Adjusts the intensity of the light reflection |
 
 Example usage:
 
 ```swift
 Image(.stickerIcon)
     .stickerEffect()
-    .stickerEffectIntensity(0.5)
-    .stickerEffectNoiseScale(200)
-    .stickerEffectLightIntensity(0.5)
+    .stickerIntensity(0.5)
+    .stickerNoiseScale(200)
+    .stickerLightIntensity(0.5)
 ```
 
 ## Motion

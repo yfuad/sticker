@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StickerMotion.swift
 //  Sticker
 //
 //  Created by Benjamin Pisano on 04/11/2024.

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  IdentityStickerTransformer.swift
 //  Sticker
 //
 //  Created by Benjamin Pisano on 03/11/2024.
@@ -13,8 +13,8 @@ public struct IdentityStickerTransformer: StickerMotionEffect {
     }
 }
 
-public extension StickerMotionEffect where Self == IdentityStickerTransformer {
-    static var identity: Self {
+extension StickerMotionEffect where Self == IdentityStickerTransformer {
+    public static var identity: Self {
         .init()
     }
 }

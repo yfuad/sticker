@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  StickerEffectParameter.swift
 //  Sticker
 //
 //  Created by Benjamin Pisano on 05/11/2024.
@@ -8,41 +8,41 @@
 import SwiftUI
 
 extension EnvironmentValues {
-    @Entry var stickerEffectScale: Float = 1.4
-    @Entry var stickerEffectIntensity: Float = 0.8
-    @Entry var stickerEffectContrast: Float = 0.9
-    @Entry var stickerEffectBlendFactor: Float = 0.4
-    @Entry var stickerEffectNoiseScale: Float = 140
-    @Entry var stickerEffectNoiseIntensity: Float = 0.1
-    @Entry var stickerEffectLightIntensity: Float = 0.3
+    @Entry var stickerScale: Float = 1.4
+    @Entry var stickerIntensity: Float = 0.8
+    @Entry var stickerContrast: Float = 0.9
+    @Entry var stickerBlend: Float = 0.4
+    @Entry var stickerNoiseScale: Float = 140
+    @Entry var stickerNoiseIntensity: Float = 0.1
+    @Entry var stickerLightIntensity: Float = 0.3
 }
 
-public extension View {
-    func stickerEffectScale(_ scale: Float) -> some View {
-        environment(\.stickerEffectScale, scale)
+extension View {
+    public func stickerScale(_ scale: Float) -> some View {
+        environment(\.stickerScale, scale)
     }
 
-    func stickerEffectIntensity(_ intensity: Float) -> some View {
-        environment(\.stickerEffectIntensity, intensity)
+    public func stickerIntensity(_ intensity: Float) -> some View {
+        environment(\.stickerIntensity, intensity)
     }
 
-    func stickerEffectContrast(_ contrast: Float) -> some View {
-        environment(\.stickerEffectContrast, contrast)
+    public func stickerContrast(_ contrast: Float) -> some View {
+        environment(\.stickerContrast, contrast)
     }
 
-    func stickerEffectBlendFactor(_ blendFactor: Float) -> some View {
-        environment(\.stickerEffectBlendFactor, blendFactor)
+    public func stickerBlend(_ blendFactor: Float) -> some View {
+        environment(\.stickerBlend, blendFactor)
     }
 
-    func stickerEffectNoiseScale(_ scale: Float) -> some View {
-        environment(\.stickerEffectNoiseScale, scale)
+    public func stickerNoiseScale(_ scale: Float) -> some View {
+        environment(\.stickerNoiseScale, scale)
     }
 
-    func stickerEffectNoiseIntensity(_ intensity: Float) -> some View {
-        environment(\.stickerEffectNoiseIntensity, intensity)
+    public func stickerNoiseIntensity(_ intensity: Float) -> some View {
+        environment(\.stickerNoiseIntensity, intensity)
     }
 
-    func stickerEffectLightIntensity(_ intensity: Float) -> some View {
-        environment(\.stickerEffectLightIntensity, intensity)
+    public func stickerLightIntensity(_ intensity: Float) -> some View {
+        environment(\.stickerLightIntensity, intensity)
     }
 }
