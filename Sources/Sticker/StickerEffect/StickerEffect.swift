@@ -15,16 +15,32 @@ private struct StickerEffectViewModifier: ViewModifier {
     @Environment(\.stickerIntensity) private var stickerIntensity
     @Environment(\.stickerContrast) private var stickerContrast
     @Environment(\.stickerBlend) private var stickerBlend
+    @Environment(\.stickerCheckerScale) private var stickerCheckerScale
+    @Environment(\.stickerCheckerIntensity) private var stickerCheckerIntensity
     @Environment(\.stickerNoiseScale) private var stickerNoiseScale
     @Environment(\.stickerNoiseIntensity) private var stickerNoiseIntensity
     @Environment(\.stickerLightIntensity) private var stickerLightIntensity
 
     func body(content: Content) -> some View {
         content
+            .visualEffect { [motion, stickerLightIntensity] view, proxy in
+                view
+                    .colorEffect(
+                        ShaderLibrary.reflectionShader(
+                            size: proxy.size,
+                            reflectionPosition: CGPoint(
+                                x: (motion.transform.x + proxy.size.width / 2) / proxy.size.width,
+                                y: (motion.transform.y + proxy.size.height / 2) / proxy.size.height
+                            ),
+                            reflectionSize: Float(min(proxy.size.width, proxy.size.height) / 2),
+                            reflectionIntensity: motion.isActive ? stickerLightIntensity : 0
+                        )
+                    )
+            }
             .visualEffect {
                 [
                     motion, stickerScale, stickerIntensity, stickerContrast, stickerBlend,
-                    stickerNoiseScale, stickerNoiseIntensity
+                    stickerCheckerScale, stickerCheckerIntensity, stickerNoiseScale, stickerNoiseIntensity
                 ] view, proxy in
                 view
                     .colorEffect(
@@ -36,34 +52,14 @@ private struct StickerEffectViewModifier: ViewModifier {
                             intensity: stickerIntensity,
                             contrast: stickerContrast,
                             blendFactor: stickerBlend,
+                            checkerScale: stickerCheckerScale,
+                            checkerIntensity: stickerCheckerIntensity,
                             noiseScale: stickerNoiseScale,
                             noiseIntensity: stickerNoiseIntensity
                         )
                     )
             }
-            .visualEffect { [motion, stickerLightIntensity] view, proxy in
-                view
-                    .colorEffect(
-                        ShaderLibrary.reflectionShader(
-                            size: proxy.size,
-                            reflectionPosition: CGPoint(
-                                x: motion.transform.x,
-                                y: motion.transform.y
-                            ),
-                            reflectionSize: Float(min(proxy.size.width, proxy.size.height) / 2),
-                            reflectionIntensity: motion.isActive ? stickerLightIntensity : 0
-                        )
-                    )
-            }
             .mask(content)
-            .rotation3DEffect(
-                motion.isActive ? .radians(motion.transform.x - 0.5) : .degrees(0),
-                axis: (0, 1, 0)
-            )
-            .rotation3DEffect(
-                motion.isActive ? .radians(motion.transform.y - 0.5) : .degrees(0),
-                axis: (-1, 0, 0)
-            )
             .stickerTransformation(effect)
             .onStickerMotionChange { motion in
                 self.motion = motion
@@ -86,24 +82,32 @@ extension View {
     VStack {
         Circle()
             .fill(.white)
-            .stroke(.black, lineWidth: 5)
+            .overlay {
+                Circle()
+                    .stroke(.black, lineWidth: 2)
+                    .padding(2)
+            }
             .frame(height: 30)
             .animation(.snappy) { view in
                 view
                     .stickerEffect()
-                    .stickerMotionEffect(.pointerHover)
+                    .stickerMotionEffect(.pointerHover())
             }
             .shadow(radius: 20)
             .padding()
 
         Circle()
             .fill(.white)
-            .stroke(.black, lineWidth: 10)
+            .overlay {
+                Circle()
+                    .stroke(.black, lineWidth: 16)
+                    .padding()
+            }
             .frame(height: 300)
             .animation(.snappy) { view in
                 view
                     .stickerEffect()
-                    .stickerMotionEffect(.pointerHover)
+                    .stickerMotionEffect(.pointerHover(intensity: 0.5))
             }
             .shadow(radius: 20)
             .padding()

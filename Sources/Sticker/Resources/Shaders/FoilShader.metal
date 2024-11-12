@@ -20,7 +20,7 @@ float calculateBrightness(half4 color) {
     return (color.r * 0.299 + color.g * 0.587 + color.b * 0.114);
 }
 
-float noise(float2 uv) {
+float noisePattern(float2 uv) {
     float2 i = floor(uv);
     float2 f = fract(uv);
 
@@ -37,43 +37,73 @@ float noise(float2 uv) {
     return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
-// Main foil shader function
-[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 imageSize, float scale, float intensity, float contrast, float blendFactor, float noiseScale, float noiseIntensity) {
-    // Normalize the position based on image size to make noise scale uniform
-    float2 normalizedPosition = position / (imageSize * scale);
+// Checker pattern function to create a diamond (lozenge) effect
+float checkerPattern(float2 uv, float scale, float degreesAngle) {
+    float radiansAngle = degreesAngle * M_PI_F / 180;
+
+    // Scale the UV coordinates
+    uv *= scale;
+
+    // Rotate the UV coordinates by the specified angle
+    float cosAngle = cos(radiansAngle);
+    float sinAngle = sin(radiansAngle);
+    float2 rotatedUV = float2(
+                              cosAngle * uv.x - sinAngle * uv.y,
+                              sinAngle * uv.x + cosAngle * uv.y
+                              );
+
+    // Determine if the current tile is black or white
+    return fmod(floor(rotatedUV.x) + floor(rotatedUV.y), 2.0) == 0.0 ? 0.0 : 1.0;
+}
+
+// Function to mix colors with more intensity on lighter colors
+half4 lightnessMix(half4 baseColor, half4 overlayColor, float intensity, float baselineFactor) {
+    // Calculate brightness of the base color
+    float brightness = calculateBrightness(baseColor);
+
+    // Adjust mix factor based on brightness, with a minimum baseline for darker colors
+    float adjustedMixFactor = max(smoothstep(0.2, 1.0, brightness) * intensity, baselineFactor);
+
+    // Perform color mixing
+    return mix(baseColor, overlayColor, adjustedMixFactor);
+}
+
+// Function to increase contrast based on a pattern value
+half4 increaseContrast(half4 source, float pattern, float intensity) {
+    // Calculate the brightness of the source color
+    float brightness = calculateBrightness(source);
+
+    // Determine the amount of contrast to apply, based on pattern and brightness
+    float contrastFactor = mix(1.0, intensity, pattern * brightness);
+
+    // Center the source color around 0.5, apply contrast adjustment, then re-center
+    half4 contrastedColor = (source - half4(0.5)) * contrastFactor + half4(0.5);
+
+    return contrastedColor;
+}
+
+[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity) {
+    // Normalize the offset by dividing by size to keep it consistent across different view sizes
+    float2 normalizedOffset = (offset + size * 250) / (size * scale) * 0.002;
+
+    // Adjust UV coordinates by adding the normalized offset, then apply scaling
+    float2 uv = (position / (size * scale)) + normalizedOffset;
 
     // Scale the noise based on the normalized position and noiseScale parameter
-    float gradientNoise = random(normalizedPosition) * 0.1;
-
-    // Calculate the normalized offsets
-    float offsetWeight = 0.002;
-    float normalizedOffsetX = normalizedPosition.x + offset.x * offsetWeight;
-    float normalizedOffsetY = normalizedPosition.y + offset.y * offsetWeight;
+    float gradientNoise = random(position) * 0.1;
+    float checker = checkerPattern(position / size * checkerScale, checkerScale, 45.0);
+    float noise = noisePattern(position / size * noiseScale);
 
     // Calculate less saturated color shifts for a metallic effect
-    half baseIntensity = contrast;
-    half r = half(baseIntensity + 0.25 * sin(normalizedOffsetX * 10.0 + gradientNoise));
-    half g = half(baseIntensity + 0.25 * cos(normalizedOffsetY * 10.0 + gradientNoise));
-    half b = half(baseIntensity + 0.25 * sin((normalizedOffsetX + normalizedOffsetY) * 10.0 - gradientNoise));
+    half r = half(contrast + 0.25 * sin(uv.x * 10.0 + gradientNoise));
+    half g = half(contrast + 0.25 * cos(uv.y * 10.0 + gradientNoise));
+    half b = half(contrast + 0.25 * sin((uv.x + uv.y) * 10.0 - gradientNoise));
 
-    // Apply color shifts to create foil-like iridescence
     half4 foilColor = half4(r, g, b, 1.0);
+    half4 mixedFoilColor = lightnessMix(color, foilColor, intensity, 0.3);
 
-    // Calculate brightness of the input color
-    float brightness = calculateBrightness(color);
+    half4 checkerFoil = increaseContrast(mixedFoilColor, checker, checkerIntensity);
+    half4 noiseCheckerFoil = increaseContrast(checkerFoil, noise, noiseIntensity);
 
-    // Determine mix factor based on brightness
-    float mixFactor = smoothstep(0.3, 0.7, brightness);
-
-    // Ensure minimum mix factor for black and white colors
-    float minMixFactor = blendFactor; // Adjust this value for the minimum foil effect
-    mixFactor = max(mixFactor, minMixFactor); // Ensure at least minMixFactor is applied
-
-    // Blend the foil effect with the original color using the adjusted mix factor
-    half4 gradient = mix(color, foilColor, mixFactor * intensity); // Mix less for darker colors, more for lighter/vibrant colors
-
-    // Add a noise effect
-    float noiseOverlay = noise(position / imageSize * noiseScale);
-
-    return mix(gradient, noiseOverlay, mixFactor * noiseIntensity);
+    return noiseCheckerFoil;
 }

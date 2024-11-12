@@ -28,7 +28,7 @@ struct WithSizeViewModifier<ModifiedContent: View>: ViewModifier {
 
 extension View {
     func withViewSize<ModifiedContent: View>(
-        _ makeView: @escaping (_ view: AnyView, _ size: CGSize) -> ModifiedContent
+        @ViewBuilder _ makeView: @escaping (_ view: AnyView, _ size: CGSize) -> ModifiedContent
     ) -> some View {
         modifier(WithSizeViewModifier(makeView: makeView))
     }

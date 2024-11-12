@@ -13,12 +13,14 @@ extension ShaderLibrary {
     static func foilShader(
         offset: CGPoint = .zero,
         size: CGSize = .zero,
-        scale: Float = 1.4,
+        scale: Float = 2,
         intensity: Float = 0.8,
         contrast: Float = 0.9,
         blendFactor: Float = 0.4,
-        noiseScale: Float = 140,
-        noiseIntensity: Float = 0.1
+        checkerScale: Float = 5,
+        checkerIntensity: Float = 1.2,
+        noiseScale: Float = 100,
+        noiseIntensity: Float = 1.2
     ) -> Shader {
         moduleLibrary.foil(
             .float2(offset),
@@ -27,6 +29,8 @@ extension ShaderLibrary {
             .float(intensity),
             .float(contrast),
             .float(blendFactor),
+            .float(checkerScale),
+            .float(checkerIntensity),
             .float(noiseScale),
             .float(noiseIntensity)
         )
