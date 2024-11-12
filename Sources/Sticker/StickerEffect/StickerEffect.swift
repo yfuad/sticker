@@ -12,7 +12,7 @@ private struct StickerEffectViewModifier: ViewModifier {
 
     @Environment(\.stickerMotionEffect) private var effect
     @Environment(\.stickerScale) private var stickerScale
-    @Environment(\.stickerIntensity) private var stickerIntensity
+    @Environment(\.stickerColorIntensity) private var stickerColorIntensity
     @Environment(\.stickerContrast) private var stickerContrast
     @Environment(\.stickerBlend) private var stickerBlend
     @Environment(\.stickerCheckerScale) private var stickerCheckerScale
@@ -39,8 +39,9 @@ private struct StickerEffectViewModifier: ViewModifier {
             }
             .visualEffect {
                 [
-                    motion, stickerScale, stickerIntensity, stickerContrast, stickerBlend,
-                    stickerCheckerScale, stickerCheckerIntensity, stickerNoiseScale, stickerNoiseIntensity
+                    motion, stickerScale, stickerColorIntensity, stickerContrast, stickerBlend,
+                    stickerCheckerScale, stickerCheckerIntensity, stickerNoiseScale,
+                    stickerNoiseIntensity
                 ] view, proxy in
                 view
                     .colorEffect(
@@ -49,7 +50,7 @@ private struct StickerEffectViewModifier: ViewModifier {
                                 ? (motion.transform * -150).point : StickerTransform.neutral.point,
                             size: proxy.size,
                             scale: stickerScale,
-                            intensity: stickerIntensity,
+                            intensity: stickerColorIntensity,
                             contrast: stickerContrast,
                             blendFactor: stickerBlend,
                             checkerScale: stickerCheckerScale,

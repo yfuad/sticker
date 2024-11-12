@@ -9,7 +9,7 @@ import SwiftUI
 
 extension EnvironmentValues {
     @Entry var stickerScale: Float = 3
-    @Entry var stickerIntensity: Float = 0.8
+    @Entry var stickerColorIntensity: Float = 0.8
     @Entry var stickerContrast: Float = 0.9
     @Entry var stickerBlend: Float = 0.4
     @Entry var stickerCheckerScale: Float = 5
@@ -24,8 +24,8 @@ extension View {
         environment(\.stickerScale, scale)
     }
 
-    public func stickerIntensity(_ intensity: Float) -> some View {
-        environment(\.stickerIntensity, intensity)
+    public func stickerColorIntensity(_ intensity: Float) -> some View {
+        environment(\.stickerColorIntensity, intensity)
     }
 
     public func stickerContrast(_ contrast: Float) -> some View {

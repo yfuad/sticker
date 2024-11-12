@@ -37,12 +37,14 @@ The following modifiers are available to customize the sticker effect:
 
 | Modifier | Default Value | Description |
 |----------|---------------|-------------|
-| `.stickerScale(_:)` | 1.4 | Controls the overall scale of the effect pattern |
-| `.stickerIntensity(_:)` | 0.8 | Adjusts the strength of the holographic effect |
+| `.stickerScale(_:)` | 3.0 | Controls the overall scale of the effect pattern |
+| `.stickerColorIntensity(_:)` | 0.8 | Adjusts the strength of the holographic effect |
 | `.stickerContrast(_:)` | 0.9 | Modifies the contrast between light and dark areas |
 | `.stickerBlend(_:)` | 0.4 | Controls how much the effect blends with the original content |
-| `.stickerNoiseScale(_:)` | 140.0 | Adjusts the scale of the noise pattern |
-| `.stickerNoiseIntensity(_:)` | 0.1 | Controls the intensity of the noise effect |
+| `.stickerCheckerScale(_:)` | 5.0 | Adjusts the scale of the checker pattern |
+| `.stickerCheckerIntensity(_:)` | 1.2 | Controls the intensity of the checker effect |
+| `.stickerNoiseScale(_:)` | 100.0 | Adjusts the scale of the noise pattern |
+| `.stickerNoiseIntensity(_:)` | 1.2 | Controls the intensity of the noise effect |
 | `.stickerLightIntensity(_:)` | 0.3 | Adjusts the intensity of the light reflection |
 
 Example usage:
@@ -50,7 +52,7 @@ Example usage:
 ```swift
 Image(.stickerIcon)
     .stickerEffect()
-    .stickerIntensity(0.5)
+    .stickerColorIntensity(0.5)
     .stickerNoiseScale(200)
     .stickerLightIntensity(0.5)
 ```
@@ -62,14 +64,14 @@ The effect can be animated using the `.stickerMotionEffect()` view modifier.
 ```swift
 Image(.stickerIcon)
     .stickerEffect()
-    .stickerMotionEffect(.pointerHover)
+    .stickerMotionEffect(.pointerHover(intensity: 0.5))
 ```
 
 The following motion effects are available:
 
 | Effect | Description |
 | --- | --- |
-| `.pointerHover` | Apply a 3D transform that looks at the pointer. |
+| `.pointerHover(intensity:)` | Apply a 3D transform that looks at the pointer. The `intensity` parameter controls the strength of the effect. |
 | `.identity` | Remove the motion effect. |
 
 You can create your own motion effects by implementing the `StickerMotionEffect` protocol.
