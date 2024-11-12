@@ -84,7 +84,7 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
 
 [[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity) {
     // Normalize the offset by dividing by size to keep it consistent across different view sizes
-    float2 normalizedOffset = (offset + size * 250) / (size * scale) * 0.002;
+    float2 normalizedOffset = (offset + size * 250) / (size * scale) * 0.01;
 
     // Adjust UV coordinates by adding the normalized offset, then apply scaling
     float2 uv = (position / (size * scale)) + normalizedOffset;
