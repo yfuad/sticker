@@ -20,6 +20,7 @@ final class StickerMotionObserver {
         self.onChange = onChange
     }
 
+    @MainActor
     func update(motion: StickerMotion) {
         self.motion = motion
         onChange(motion)

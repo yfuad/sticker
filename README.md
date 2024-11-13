@@ -67,6 +67,17 @@ Image(.stickerIcon)
     .stickerMotionEffect(.pointerHover(intensity: 0.5))
 ```
 
+Using the `.animation` view modifier allows you to control the animation of the effect.
+
+```swift
+Image(.stickerIcon)
+    .animation(.snappy) { view in
+        view
+            .stickerEffect()
+            .stickerMotionEffect(.pointerHover(intensity: 0.5))
+    }
+```
+
 The following motion effects are available:
 
 | Effect | Description |
@@ -95,5 +106,26 @@ struct MyMotionEffect: StickerMotionEffect {
 
 extension StickerMotionEffect where Self == MyMotionEffect {
     static var myMotionEffect: Self { .init() }
+}
+```
+
+## Compiling Shaders
+
+On iOS 18, macOS 15 and visionOS 2, Apple added the ability to compile Metal shaders at runtime to prevent frame delay on first use. You can compile the Sticker shaders as soon as your app launches by calling the following function:
+
+```swift
+import SwiftUI
+import Sticker
+
+@main
+struct MyApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+                .task {
+                    await ShaderLibrary.compileStickerShaders()
+                }
+        }
+    }
 }
 ```

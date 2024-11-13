@@ -49,7 +49,9 @@ extension ShaderLibrary {
             .float(reflectionIntensity)
         )
     }
+}
 
+public extension ShaderLibrary {
     @available(iOS 18.0, macOS 15.0, visionOS 2.0, tvOS 18.0, watchOS 11.0, *)
     static func compileStickerShaders() async throws {
         try await foilShader().compile(as: .colorEffect)

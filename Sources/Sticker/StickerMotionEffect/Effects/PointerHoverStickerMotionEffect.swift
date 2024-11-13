@@ -19,11 +19,11 @@ public struct PointerHoverStickerMotionEffect: StickerMotionEffect {
                 let yRotation: Double = motionObserver.motion.transform.y / size.height
                 view
                     .rotation3DEffect(
-                        motionObserver.motion.isActive ?.radians((xRotation) * intensity) : .degrees(0),
+                        .radians((xRotation) * intensity),
                         axis: (0, 1, 0)
                     )
                     .rotation3DEffect(
-                        motionObserver.motion.isActive ? .radians((yRotation) * intensity) : .degrees(0),
+                        .radians((yRotation) * intensity),
                         axis: (-1, 0, 0)
                     )
                     .onContinuousHover { phase in
