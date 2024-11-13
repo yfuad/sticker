@@ -1,5 +1,5 @@
 //
-//  PointerHoverStickerTransformer.swift
+//  PointerHoverStickerMotionEffect.swift
 //  FoilTest
 //
 //  Created by Benjamin Pisano on 03/11/2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-public struct PointerHoverStickerTransformer: StickerMotionEffect {
+public struct PointerHoverStickerMotionEffect: StickerMotionEffect {
     let intensity: Double
 
     @Environment(\.stickerMotionObserver) private var motionObserver
@@ -27,33 +27,35 @@ public struct PointerHoverStickerTransformer: StickerMotionEffect {
                         axis: (-1, 0, 0)
                     )
                     .onContinuousHover { phase in
-                        DispatchQueue.main.async {
-                            switch phase {
-                            case .active(let location):
-                                motionObserver.update(
-                                    motion: .init(
-                                        isActive: true,
-                                        transform: .init(
-                                            x: location.x - size.width / 2,
-                                            y: location.y - size.height / 2
-                                        )
+                        switch phase {
+                        case .active(let location):
+                            motionObserver.update(
+                                motion: .init(
+                                    isActive: true,
+                                    transform: .init(
+                                        x: location.x - size.width / 2,
+                                        y: location.y - size.height / 2
                                     )
                                 )
-                            case .ended:
-                                motionObserver.update(
-                                    motion: .init(
-                                        isActive: false,
-                                        transform: .neutral
-                                    )
+                            )
+                        case .ended:
+                            motionObserver.update(
+                                motion: .init(
+                                    isActive: false,
+                                    transform: .neutral
                                 )
-                            }
+                            )
                         }
                     }
             }
     }
 }
 
-public extension StickerMotionEffect where Self == PointerHoverStickerTransformer {
+public extension StickerMotionEffect where Self == PointerHoverStickerMotionEffect {
+    static var pointerHover: Self {
+        .pointerHover()
+    }
+    
     static func pointerHover(intensity: Double = 1) -> Self {
         .init(intensity: intensity)
     }

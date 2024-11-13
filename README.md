@@ -72,6 +72,7 @@ The following motion effects are available:
 | Effect | Description |
 | --- | --- |
 | `.pointerHover(intensity:)` | Apply a 3D transform that looks at the pointer. The `intensity` parameter controls the strength of the effect. |
+| `.dragGesture(intensity:)` | Apply a 3D transform that follows drag gestures. The `intensity` parameter controls the strength of the effect. |
 | `.identity` | Remove the motion effect. |
 
 You can create your own motion effects by implementing the `StickerMotionEffect` protocol.

@@ -20,5 +20,5 @@ extension View {
 }
 
 public extension EnvironmentValues {
-    @Entry var stickerMotionEffect: any StickerMotionEffect = IdentityStickerTransformer()
+    @Entry var stickerMotionEffect: any StickerMotionEffect = IdentityStickerMotionEffect()
 }

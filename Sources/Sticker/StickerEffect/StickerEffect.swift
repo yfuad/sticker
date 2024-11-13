@@ -92,7 +92,7 @@ extension View {
             .animation(.snappy) { view in
                 view
                     .stickerEffect()
-                    .stickerMotionEffect(.pointerHover())
+                    .stickerMotionEffect(.pointerHover)
             }
             .shadow(radius: 20)
             .padding()
@@ -108,7 +108,7 @@ extension View {
             .animation(.snappy) { view in
                 view
                     .stickerEffect()
-                    .stickerMotionEffect(.pointerHover(intensity: 0.5))
+                    .stickerMotionEffect(.dragGesture)
             }
             .shadow(radius: 20)
             .padding()
