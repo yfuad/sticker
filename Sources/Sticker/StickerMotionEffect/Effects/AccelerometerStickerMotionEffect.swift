@@ -28,8 +28,8 @@ public struct AccelerometerStickerMotionEffect: StickerMotionEffect {
                             .onChange(of: attitude) { oldValue, newValue in
                                 shaderUpdater.update(
                                     with: .init(
-                                        x: xRotation * size.width / 3,
-                                        y: yRotation * size.height / 3
+                                        x: xRotation * size.width / 2,
+                                        y: yRotation * size.height / 2
                                     )
                                 )
                             }
