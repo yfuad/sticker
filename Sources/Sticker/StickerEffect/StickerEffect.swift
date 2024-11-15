@@ -61,8 +61,8 @@ private struct StickerEffectViewModifier: ViewModifier {
                     )
             }
             .mask(content)
-            .stickerTransformation(effect)
-            .onStickerMotionChange { motion in
+            .applyTransform(for: effect)
+            .onStickerShaderChange { motion in
                 self.motion = motion
             }
     }

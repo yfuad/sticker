@@ -10,8 +10,8 @@ import SwiftUI
 public protocol StickerMotionEffect: ViewModifier { }
 
 extension View {
-    func stickerTransformation(_ transformer: some StickerMotionEffect) -> AnyView {
-        AnyView(modifier(transformer))
+    func applyTransform(for effect: some StickerMotionEffect) -> AnyView {
+        AnyView(modifier(effect))
     }
 
     public func stickerMotionEffect(_ effect: some StickerMotionEffect) -> some View {

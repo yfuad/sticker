@@ -8,6 +8,6 @@
 import Foundation
 
 public struct StickerMotion: Hashable, Equatable, Sendable {
-    var isActive: Bool = false
-    var transform: StickerTransform = .neutral
+    public var isActive: Bool = false
+    public var transform: StickerTransform = .neutral
 }

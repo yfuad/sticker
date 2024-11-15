@@ -10,41 +10,29 @@ import SwiftUI
 public struct PointerHoverStickerMotionEffect: StickerMotionEffect {
     let intensity: Double
 
-    @Environment(\.stickerMotionObserver) private var motionObserver
+    @State private var transform: StickerTransform = .neutral
+
+    @Environment(\.stickerShaderUpdater) private var shaderUpdater
 
     public func body(content: Content) -> some View {
         content
             .withViewSize { view, size in
-                let xRotation: Double = motionObserver.motion.transform.x / size.width
-                let yRotation: Double = motionObserver.motion.transform.y / size.height
+                let xRotation: Double = (transform.x / size.width) * intensity
+                let yRotation: Double = (transform.y / size.height) * intensity
                 view
-                    .rotation3DEffect(
-                        .radians((xRotation) * intensity),
-                        axis: (0, 1, 0)
-                    )
-                    .rotation3DEffect(
-                        .radians((yRotation) * intensity),
-                        axis: (-1, 0, 0)
-                    )
+                    .rotation3DEffect(.radians(xRotation), axis: (0, 1, 0))
+                    .rotation3DEffect(.radians(yRotation), axis: (-1, 0, 0))
                     .onContinuousHover { phase in
                         switch phase {
                         case .active(let location):
-                            motionObserver.update(
-                                motion: .init(
-                                    isActive: true,
-                                    transform: .init(
-                                        x: location.x - size.width / 2,
-                                        y: location.y - size.height / 2
-                                    )
-                                )
+                            transform = .init(
+                                x: location.x - size.width / 2,
+                                y: location.y - size.height / 2
                             )
+                            shaderUpdater.update(with: transform)
                         case .ended:
-                            motionObserver.update(
-                                motion: .init(
-                                    isActive: false,
-                                    transform: .neutral
-                                )
-                            )
+                            transform = .neutral
+                            shaderUpdater.setNeutral()
                         }
                     }
             }
