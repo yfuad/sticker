@@ -84,6 +84,7 @@ The following motion effects are available:
 | --- | --- |
 | `.pointerHover(intensity:)` | Apply a 3D transform that looks at the pointer. The `intensity` parameter controls the strength of the effect. |
 | `.dragGesture(intensity:)` | Apply a 3D transform that follows drag gestures. The `intensity` parameter controls the strength of the effect. |
+| `.accelerometer(intensity:maxRotation:)` | Apply a 3D transform based on the device's accelerometer data. The `intensity` parameter controls the strength of the effect, while `maxRotation` defines the maximum rotation angle, applying a smooth rotation to the specified angle. |
 | `.identity` | Remove the motion effect. |
 
 You can create your own motion effects by implementing the `StickerMotionEffect` protocol.
