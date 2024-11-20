@@ -5,6 +5,7 @@
 //  Created by Benjamin Pisano on 15/11/2024.
 //
 
+#if os(iOS)
 import SwiftUI
 import CoreMotion
 
@@ -58,3 +59,4 @@ public extension StickerMotionEffect where Self == AccelerometerStickerMotionEff
         )
     }
 }
+#endif

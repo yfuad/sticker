@@ -5,6 +5,7 @@
 //  Created by Benjamin Pisano on 15/11/2024.
 //
 
+#if os(iOS)
 import SwiftUI
 import CoreMotion
 
@@ -60,3 +61,5 @@ extension View {
         modifier(WithAccelerometerViewModifier(makeView: makeView))
     }
 }
+
+#endif
