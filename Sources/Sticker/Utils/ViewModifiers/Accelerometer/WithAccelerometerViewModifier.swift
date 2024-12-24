@@ -10,6 +10,7 @@ import SwiftUI
 import CoreMotion
 
 private struct WithAccelerometerViewModifier<ModifiedContent: View>: ViewModifier {
+    let updateInterval: TimeInterval
     let makeView: (AnyView, AccelerometerAttitude) -> ModifiedContent
 
     private let motionManager = CMMotionManager()
@@ -30,7 +31,7 @@ private struct WithAccelerometerViewModifier<ModifiedContent: View>: ViewModifie
 
     private func startMotionUpdates() {
         guard motionManager.isDeviceMotionAvailable else { return }
-        motionManager.deviceMotionUpdateInterval = 0.1
+        motionManager.deviceMotionUpdateInterval = updateInterval
         motionManager.startDeviceMotionUpdates(to: queue) { motion, error in
             guard let motion = motion, error == nil else { return }
             var currentAttitude: AccelerometerAttitude = .init(attitude: motion.attitude)
@@ -56,9 +57,15 @@ private struct WithAccelerometerViewModifier<ModifiedContent: View>: ViewModifie
 
 extension View {
     func withAccelerometer<ModifiedContent: View>(
+        updateInterval: TimeInterval,
         @ViewBuilder _ makeView: @escaping (_ view: AnyView, _ attitude: AccelerometerAttitude) -> ModifiedContent
     ) -> some View {
-        modifier(WithAccelerometerViewModifier(makeView: makeView))
+        modifier(
+            WithAccelerometerViewModifier(
+                updateInterval: updateInterval,
+                makeView: makeView
+            )
+        )
     }
 }
 

@@ -12,6 +12,7 @@ import CoreMotion
 public struct AccelerometerStickerMotionEffect: StickerMotionEffect {
     let intensity: Double
     let maxRotation: Angle
+    let updateInterval: TimeInterval
 
     @Environment(\.stickerShaderUpdater) private var shaderUpdater
 
@@ -19,7 +20,7 @@ public struct AccelerometerStickerMotionEffect: StickerMotionEffect {
         content
             .withViewSize { view, size in
                 view
-                    .withAccelerometer { view, attitude in
+                    .withAccelerometer(updateInterval: updateInterval) { view, attitude in
                         let xRotation: Double = diminishingRotation(for: attitude.roll * intensity)
                         let yRotation: Double = diminishingRotation(for: attitude.pitch * intensity)
 
@@ -51,11 +52,13 @@ public extension StickerMotionEffect where Self == AccelerometerStickerMotionEff
 
     static func accelerometer(
         intensity: Double = 1,
-        maxRotation: Angle = .degrees(90)
+        maxRotation: Angle = .degrees(90),
+        updateInterval: TimeInterval = 0.02
     ) -> Self {
         .init(
             intensity: intensity,
-            maxRotation: maxRotation
+            maxRotation: maxRotation,
+            updateInterval: updateInterval
         )
     }
 }

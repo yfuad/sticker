@@ -20,8 +20,8 @@ struct WithSizeViewModifier<ModifiedContent: View>: ViewModifier {
                         .preference(key: ViewSizePreferenceKey.self, value: proxy.size)
                 }
             }
-            .onPreferenceChange(ViewSizePreferenceKey.self) { newSize in
-                size = newSize
+            .onPreferenceChange(ViewSizePreferenceKey.self) { [$size] newSize in
+                $size.wrappedValue = newSize
             }
     }
 }
