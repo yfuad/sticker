@@ -10,7 +10,7 @@ Add the following dependency to your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/bpisano/sticker", .upToNextMajor(from: "0.1.0"))
+    .package(url: "https://github.com/bpisano/sticker", .upToNextMajor(from: "1.3.0"))
 ]
 ```
 
@@ -35,17 +35,17 @@ By default, the effect is not animated.
 
 The following modifiers are available to customize the sticker effect:
 
-| Modifier | Default Value | Description |
-|----------|---------------|-------------|
-| `.stickerScale(_:)` | 3.0 | Controls the overall scale of the effect pattern |
-| `.stickerColorIntensity(_:)` | 0.8 | Adjusts the strength of the holographic effect |
-| `.stickerContrast(_:)` | 0.9 | Modifies the contrast between light and dark areas |
-| `.stickerBlend(_:)` | 0.4 | Controls how much the effect blends with the original content |
-| `.stickerCheckerScale(_:)` | 5.0 | Adjusts the scale of the checker pattern |
-| `.stickerCheckerIntensity(_:)` | 1.2 | Controls the intensity of the checker effect |
-| `.stickerNoiseScale(_:)` | 100.0 | Adjusts the scale of the noise pattern |
-| `.stickerNoiseIntensity(_:)` | 1.2 | Controls the intensity of the noise effect |
-| `.stickerLightIntensity(_:)` | 0.3 | Adjusts the intensity of the light reflection |
+| Modifier                       | Default Value | Description                                                   |
+| ------------------------------ | ------------- | ------------------------------------------------------------- |
+| `.stickerScale(_:)`            | 3.0           | Controls the overall scale of the effect pattern              |
+| `.stickerColorIntensity(_:)`   | 0.8           | Adjusts the strength of the holographic effect                |
+| `.stickerContrast(_:)`         | 0.9           | Modifies the contrast between light and dark areas            |
+| `.stickerBlend(_:)`            | 0.4           | Controls how much the effect blends with the original content |
+| `.stickerCheckerScale(_:)`     | 5.0           | Adjusts the scale of the checker pattern                      |
+| `.stickerCheckerIntensity(_:)` | 1.2           | Controls the intensity of the checker effect                  |
+| `.stickerNoiseScale(_:)`       | 100.0         | Adjusts the scale of the noise pattern                        |
+| `.stickerNoiseIntensity(_:)`   | 1.2           | Controls the intensity of the noise effect                    |
+| `.stickerLightIntensity(_:)`   | 0.3           | Adjusts the intensity of the light reflection                 |
 
 Example usage:
 
@@ -80,12 +80,12 @@ Image(.stickerIcon)
 
 The following motion effects are available:
 
-| Effect | Description |
-| --- | --- |
-| `.pointerHover(intensity:)` | Apply a 3D transform that looks at the pointer. The `intensity` parameter controls the strength of the effect. |
-| `.dragGesture(intensity:)` | Apply a 3D transform that follows drag gestures. The `intensity` parameter controls the strength of the effect. |
-| `.accelerometer(intensity:maxRotation:)` | Apply a 3D transform based on the device's accelerometer data. The `intensity` parameter controls the strength of the effect, while `maxRotation` defines the maximum rotation angle, applying a smooth rotation to the specified angle. |
-| `.identity` | Remove the motion effect. |
+| Effect                                                  | Description                                                                                                                                                                                                                              |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.pointerHover(intensity:)`                             | Apply a 3D transform that looks at the pointer. The `intensity` parameter controls the strength of the effect.                                                                                                                           |
+| `.dragGesture(intensity:)`                              | Apply a 3D transform that follows drag gestures. The `intensity` parameter controls the strength of the effect.                                                                                                                          |
+| `.accelerometer(intensity:maxRotation:updateInterval:)` | Apply a 3D transform based on the device's accelerometer data. The `intensity` parameter controls the strength of the effect, while `maxRotation` defines the maximum rotation angle, applying a smooth rotation to the specified angle. |
+| `.identity`                                             | Remove the motion effect.                                                                                                                                                                                                                |
 
 You can create your own motion effects by implementing the `StickerMotionEffect` protocol.
 
