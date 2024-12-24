@@ -14,7 +14,6 @@ private struct WithAccelerometerViewModifier<ModifiedContent: View>: ViewModifie
     let makeView: (AnyView, AccelerometerAttitude) -> ModifiedContent
 
     private let motionManager = CMMotionManager()
-    private let queue = OperationQueue()
 
     @State private var attitude: AccelerometerAttitude = .init()
     @State private var referenceAttitude: AccelerometerAttitude?
@@ -32,7 +31,7 @@ private struct WithAccelerometerViewModifier<ModifiedContent: View>: ViewModifie
     private func startMotionUpdates() {
         guard motionManager.isDeviceMotionAvailable else { return }
         motionManager.deviceMotionUpdateInterval = updateInterval
-        motionManager.startDeviceMotionUpdates(to: queue) { motion, error in
+        motionManager.startDeviceMotionUpdates(to: .main) { motion, error in
             guard let motion = motion, error == nil else { return }
             var currentAttitude: AccelerometerAttitude = .init(attitude: motion.attitude)
 
