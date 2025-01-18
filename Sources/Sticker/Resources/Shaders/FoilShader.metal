@@ -82,7 +82,18 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
     return contrastedColor;
 }
 
-[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity) {
+float getPatternType(int option) {
+    switch (option) {
+        case 0:
+            return 45.0;
+        case 1:
+            return 0.0;
+        default:
+            return 45.0;  // Default as diamond for unspecified options
+    }
+}
+
+[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity, float patternType) {
     // Normalize the offset by dividing by size to keep it consistent across different view sizes
     float2 normalizedOffset = (offset + size * 250) / (size * scale) * 0.01;
 
@@ -91,7 +102,7 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
 
     // Scale the noise based on the normalized position and noiseScale parameter
     float gradientNoise = random(position) * 0.1;
-    float checker = checkerPattern(position / size * checkerScale, checkerScale, 45.0);
+    float checker = checkerPattern(position / size * checkerScale, checkerScale, getPatternType(patternType));
     float noise = noisePattern(position / size * noiseScale);
 
     // Calculate less saturated color shifts for a metallic effect
