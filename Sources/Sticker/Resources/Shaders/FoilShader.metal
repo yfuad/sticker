@@ -82,16 +82,40 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
     return contrastedColor;
 }
 
-float getPatternType(int option) {
+float squarePattern(float2 uv, float scale, float degreesAngle) {
+    float radiansAngle = degreesAngle * M_PI_F / 180;
+
+    // Scale the UV coordinates
+    uv *= scale;
+
+    // Rotate the UV coordinates by the specified angle
+    float cosAngle = cos(radiansAngle);
+    float sinAngle = sin(radiansAngle);
+    float2 rotatedUV = float2(
+        cosAngle * uv.x - sinAngle * uv.y,
+        sinAngle * uv.x + cosAngle * uv.y
+    );
+
+    // Determine if the current tile is black or white
+    return fmod(floor(rotatedUV.x) + floor(rotatedUV.y), 2.0) == 0.0 ? 0.0 : 1.0;
+}
+
+float diamondPattern(float2 uv, float scale) {
+    // Hardcoded angle of 45 degrees for the diamond pattern
+    return squarePattern(uv, scale, 45.0);
+}
+
+float stickerPattern(int option, float2 uv, float scale) {
     switch (option) {
         case 0:
-            return 45.0;
+            return diamondPattern(uv, scale);
         case 1:
-            return 0.0;
+            return squarePattern(uv, scale, 0.0);
         default:
-            return 45.0;  // Default as diamond for unspecified options
+            return diamondPattern(uv, scale); // Default as diamond for unspecified options
     }
 }
+
 
 [[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity, float patternType) {
     // Normalize the offset by dividing by size to keep it consistent across different view sizes
@@ -102,7 +126,7 @@ float getPatternType(int option) {
 
     // Scale the noise based on the normalized position and noiseScale parameter
     float gradientNoise = random(position) * 0.1;
-    float checker = checkerPattern(position / size * checkerScale, checkerScale, getPatternType(patternType));
+    float checker = stickerPattern(patternType, position / size * checkerScale, checkerScale);
     float noise = noisePattern(position / size * noiseScale);
 
     // Calculate less saturated color shifts for a metallic effect

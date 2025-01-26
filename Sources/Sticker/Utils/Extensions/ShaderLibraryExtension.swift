@@ -34,7 +34,7 @@ extension ShaderLibrary {
             .float(checkerIntensity),
             .float(noiseScale),
             .float(noiseIntensity),
-            .float(patternType.uniqueIdentifier)
+            .float(Float(patternType.rawValue))
         )
     }
 
@@ -61,16 +61,7 @@ public extension ShaderLibrary {
     }
 }
 
-public enum StickerPattern: Sendable {
-    case diamond
-    case square
-    
-    var uniqueIdentifier: Float {
-        switch self {
-        case .diamond:
-            return 0.0
-        case .square:
-            return 1.0
-        }
-    }
+public enum StickerPattern: Int, Hashable, Equatable, Sendable {
+    case diamond = 0
+    case square = 1
 }
