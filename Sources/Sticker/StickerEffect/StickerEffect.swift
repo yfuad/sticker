@@ -20,7 +20,8 @@ private struct StickerEffectViewModifier: ViewModifier {
     @Environment(\.stickerNoiseScale) private var stickerNoiseScale
     @Environment(\.stickerNoiseIntensity) private var stickerNoiseIntensity
     @Environment(\.stickerLightIntensity) private var stickerLightIntensity
-
+    @Environment(\.stickerPattern) private var stickerPattern
+    
     func body(content: Content) -> some View {
         content
             .visualEffect { [motion, stickerLightIntensity] view, proxy in
@@ -41,7 +42,7 @@ private struct StickerEffectViewModifier: ViewModifier {
                 [
                     motion, stickerScale, stickerColorIntensity, stickerContrast, stickerBlend,
                     stickerCheckerScale, stickerCheckerIntensity, stickerNoiseScale,
-                    stickerNoiseIntensity
+                    stickerNoiseIntensity, stickerPattern
                 ] view, proxy in
                 view
                     .colorEffect(
@@ -56,7 +57,8 @@ private struct StickerEffectViewModifier: ViewModifier {
                             checkerScale: stickerCheckerScale,
                             checkerIntensity: stickerCheckerIntensity,
                             noiseScale: stickerNoiseScale,
-                            noiseIntensity: stickerNoiseIntensity
+                            noiseIntensity: stickerNoiseIntensity,
+                            patternType: stickerPattern
                         )
                     )
             }

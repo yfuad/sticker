@@ -82,7 +82,42 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
     return contrastedColor;
 }
 
-[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity) {
+float squarePattern(float2 uv, float scale, float degreesAngle) {
+    float radiansAngle = degreesAngle * M_PI_F / 180;
+
+    // Scale the UV coordinates
+    uv *= scale;
+
+    // Rotate the UV coordinates by the specified angle
+    float cosAngle = cos(radiansAngle);
+    float sinAngle = sin(radiansAngle);
+    float2 rotatedUV = float2(
+        cosAngle * uv.x - sinAngle * uv.y,
+        sinAngle * uv.x + cosAngle * uv.y
+    );
+
+    // Determine if the current tile is black or white
+    return fmod(floor(rotatedUV.x) + floor(rotatedUV.y), 2.0) == 0.0 ? 0.0 : 1.0;
+}
+
+float diamondPattern(float2 uv, float scale) {
+    // Hardcoded angle of 45 degrees for the diamond pattern
+    return squarePattern(uv, scale, 45.0);
+}
+
+float stickerPattern(int option, float2 uv, float scale) {
+    switch (option) {
+        case 0:
+            return diamondPattern(uv, scale);
+        case 1:
+            return squarePattern(uv, scale, 0.0);
+        default:
+            return diamondPattern(uv, scale); // Default as diamond for unspecified options
+    }
+}
+
+
+[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity, float patternType) {
     // Normalize the offset by dividing by size to keep it consistent across different view sizes
     float2 normalizedOffset = (offset + size * 250) / (size * scale) * 0.01;
 
@@ -91,7 +126,7 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
 
     // Scale the noise based on the normalized position and noiseScale parameter
     float gradientNoise = random(position) * 0.1;
-    float checker = checkerPattern(position / size * checkerScale, checkerScale, 45.0);
+    float pattern = stickerPattern(patternType, position / size * checkerScale, checkerScale);
     float noise = noisePattern(position / size * noiseScale);
 
     // Calculate less saturated color shifts for a metallic effect
@@ -102,7 +137,7 @@ half4 increaseContrast(half4 source, float pattern, float intensity) {
     half4 foilColor = half4(r, g, b, 1.0);
     half4 mixedFoilColor = lightnessMix(color, foilColor, intensity, 0.3);
 
-    half4 checkerFoil = increaseContrast(mixedFoilColor, checker, checkerIntensity);
+    half4 checkerFoil = increaseContrast(mixedFoilColor, pattern, checkerIntensity);
     half4 noiseCheckerFoil = increaseContrast(checkerFoil, noise, noiseIntensity);
 
     return noiseCheckerFoil;
