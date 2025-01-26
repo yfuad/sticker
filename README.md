@@ -46,7 +46,7 @@ The following modifiers are available to customize the sticker effect:
 | `.stickerNoiseScale(_:)`       | 100.0         | Adjusts the scale of the noise pattern                        |
 | `.stickerNoiseIntensity(_:)`   | 1.2           | Controls the intensity of the noise effect                    |
 | `.stickerLightIntensity(_:)`   | 0.3           | Adjusts the intensity of the light reflection                 |
-| `.stickerPatternType(_:)`      | diamond       | Modifies the checker pattern                                  |     
+| `.stickerPattern(_:)`          | diamond       | Modifies the checker pattern                                  |     
 
 Example usage:
 

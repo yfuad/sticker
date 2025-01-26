@@ -37,25 +37,6 @@ float noisePattern(float2 uv) {
     return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
-// Checker pattern function to create a diamond (lozenge) effect
-float checkerPattern(float2 uv, float scale, float degreesAngle) {
-    float radiansAngle = degreesAngle * M_PI_F / 180;
-
-    // Scale the UV coordinates
-    uv *= scale;
-
-    // Rotate the UV coordinates by the specified angle
-    float cosAngle = cos(radiansAngle);
-    float sinAngle = sin(radiansAngle);
-    float2 rotatedUV = float2(
-                              cosAngle * uv.x - sinAngle * uv.y,
-                              sinAngle * uv.x + cosAngle * uv.y
-                              );
-
-    // Determine if the current tile is black or white
-    return fmod(floor(rotatedUV.x) + floor(rotatedUV.y), 2.0) == 0.0 ? 0.0 : 1.0;
-}
-
 // Function to mix colors with more intensity on lighter colors
 half4 lightnessMix(half4 baseColor, half4 overlayColor, float intensity, float baselineFactor) {
     // Calculate brightness of the base color
@@ -92,9 +73,9 @@ float squarePattern(float2 uv, float scale, float degreesAngle) {
     float cosAngle = cos(radiansAngle);
     float sinAngle = sin(radiansAngle);
     float2 rotatedUV = float2(
-        cosAngle * uv.x - sinAngle * uv.y,
-        sinAngle * uv.x + cosAngle * uv.y
-    );
+                              cosAngle * uv.x - sinAngle * uv.y,
+                              sinAngle * uv.x + cosAngle * uv.y
+                              );
 
     // Determine if the current tile is black or white
     return fmod(floor(rotatedUV.x) + floor(rotatedUV.y), 2.0) == 0.0 ? 0.0 : 1.0;
@@ -116,17 +97,34 @@ float stickerPattern(int option, float2 uv, float scale) {
     }
 }
 
+[[ stitchable ]] half4 foil(
+                            float2 position,
+                            half4 color,
+                            float2 offset,
+                            float2 size,
+                            float scale,
+                            float intensity,
+                            float contrast,
+                            float blendFactor,
+                            float checkerScale,
+                            float checkerIntensity,
+                            float noiseScale,
+                            float noiseIntensity,
+                            float patternType
+) {
+    // Calculate aspect ratio (width / height)
+    float aspectRatio = size.x / size.y;
 
-[[ stitchable ]] half4 foil(float2 position, half4 color, float2 offset, float2 size, float scale, float intensity, float contrast, float blendFactor, float checkerScale, float checkerIntensity, float noiseScale, float noiseIntensity, float patternType) {
     // Normalize the offset by dividing by size to keep it consistent across different view sizes
     float2 normalizedOffset = (offset + size * 250) / (size * scale) * 0.01;
+    float2 normalizedPosition = float2(position.x * aspectRatio, position.y);
 
     // Adjust UV coordinates by adding the normalized offset, then apply scaling
     float2 uv = (position / (size * scale)) + normalizedOffset;
 
     // Scale the noise based on the normalized position and noiseScale parameter
     float gradientNoise = random(position) * 0.1;
-    float pattern = stickerPattern(patternType, position / size * checkerScale, checkerScale);
+    float pattern = stickerPattern(patternType, normalizedPosition / size * checkerScale, checkerScale);
     float noise = noisePattern(position / size * noiseScale);
 
     // Calculate less saturated color shifts for a metallic effect

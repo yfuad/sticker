@@ -17,7 +17,7 @@ extension EnvironmentValues {
     @Entry var stickerNoiseScale: Float = 100
     @Entry var stickerNoiseIntensity: Float = 1.2
     @Entry var stickerLightIntensity: Float = 0.3
-    @Entry var stickerPattern: StickerPattern = .diamond
+    @Entry var stickerPattern: StickerPatternType = .diamond
 }
 
 extension View {
@@ -57,7 +57,7 @@ extension View {
         environment(\.stickerLightIntensity, intensity)
     }
     
-    public func stickerPatternType(_ type: StickerPattern) -> some View {
+    public func stickerPattern(_ type: StickerPatternType) -> some View {
         environment(\.stickerPattern, type)
     }
 }

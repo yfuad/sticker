@@ -21,7 +21,7 @@ extension ShaderLibrary {
         checkerIntensity: Float = 1.2,
         noiseScale: Float = 100,
         noiseIntensity: Float = 1.2,
-        patternType: StickerPattern = .diamond
+        patternType: StickerPatternType = .diamond
     ) -> Shader {
         moduleLibrary.foil(
             .float2(offset),
@@ -59,9 +59,4 @@ public extension ShaderLibrary {
         try await foilShader().compile(as: .colorEffect)
         try await reflectionShader().compile(as: .colorEffect)
     }
-}
-
-public enum StickerPattern: Int, Hashable, Equatable, Sendable {
-    case diamond = 0
-    case square = 1
 }

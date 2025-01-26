@@ -99,14 +99,11 @@ extension View {
             .shadow(radius: 20)
             .padding()
 
-        Circle()
-            .fill(.white)
-            .overlay {
-                Circle()
-                    .stroke(.black, lineWidth: 16)
-                    .padding()
-            }
+        Image(systemName: "applelogo")
+            .resizable()
+            .aspectRatio(contentMode: .fit)
             .frame(height: 300)
+            .foregroundStyle(.white)
             .animation(.snappy) { view in
                 view
                     .stickerEffect()
