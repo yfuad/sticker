@@ -126,7 +126,7 @@ float stickerPattern(int option, float2 uv, float scale) {
 
     // Scale the noise based on the normalized position and noiseScale parameter
     float gradientNoise = random(position) * 0.1;
-    float checker = stickerPattern(patternType, position / size * checkerScale, checkerScale);
+    float pattern = stickerPattern(patternType, position / size * checkerScale, checkerScale);
     float noise = noisePattern(position / size * noiseScale);
 
     // Calculate less saturated color shifts for a metallic effect
@@ -137,7 +137,7 @@ float stickerPattern(int option, float2 uv, float scale) {
     half4 foilColor = half4(r, g, b, 1.0);
     half4 mixedFoilColor = lightnessMix(color, foilColor, intensity, 0.3);
 
-    half4 checkerFoil = increaseContrast(mixedFoilColor, checker, checkerIntensity);
+    half4 checkerFoil = increaseContrast(mixedFoilColor, pattern, checkerIntensity);
     half4 noiseCheckerFoil = increaseContrast(checkerFoil, noise, noiseIntensity);
 
     return noiseCheckerFoil;
